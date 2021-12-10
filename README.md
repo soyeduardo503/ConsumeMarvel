@@ -46,6 +46,8 @@ Debe proporcionar el usuario y contraseña del usuario para obtener un token par
             "token": "cleeyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoiY2FybG9zIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzOTE0ODA4NywiZXhwIjoxNjM5MTQ4Njg3fQ.av3rWWc9wy4NNziAAabR8JXWArjmznGFtBg90mMEHhlQOtnBt_6He29SC0bEvXU3_E3Apb90tPZ8c-0B_o6F9w"
           }  
 
+El valor de token debe ser agregado en las siguientes peticiones para poder consumir los servicios en el HEADER Authorization->{token_obtenido}, la duracion del token es de 10 min
+
 
 
 ### Listas
@@ -80,28 +82,7 @@ El JSONObject "result" varia segun la lista
     Content-Type: application/json
     Content-Length: 2
 
-    {
-    "response": {
-      "code": "200",
-      "status": "Ok",
-      "copyright": "© 2021 MARVEL",
-      "attributionText": "Data provided by Marvel. © 2021 MARVEL",
-      "attributionHTML": "<a href=\"http://marvel.com\">Data provided by Marvel. © 2021 MARVEL</a>",
-      "data": {
-        "offset": "0",
-        "limit": "20",
-        "total": "1",
-        "count": "1",
-        "results": [
-          {
-            "id": "1009351",
-            "name": "Hulk",
-            "series":[]
-            "creators":[]
-            "comics":[]
-            }
-        }
-    }
+  { "response": { "code": "200", "status": "Ok", "copyright": " 2021 MARVEL", "attributionText": "", "attributionHTML": "", "data": { "offset": "0", "limit": "20", "total": "1", "count": "1", "results": [ { "id": "1009351", "name": "Hulk", "series":[] "creators":[] "comics":[] } } }}
 
 tipos de JSONObject de Result
 #### MarvelCharacterResponse
@@ -113,9 +94,165 @@ tipos de JSONObject de Result
         { "id": "int", "firstName": "string", "middleName": "string", "lastName": "string", "suffix": "string", "fullName": "string", "modified": "Date", "resourceURI": "string", "urls": [ { "type": "string", "url": "string" }], "thumbnail":{} ,"series":[], "comics":[] , "characters":[]}
 
 
+  
+### Serivicios POST
+  Estos servicios buscan  de forma especifica un Personaje, Comics o Creador. Para poder consumir todos estos servicios se debe de enviar la auteniticacion como se explico en el servicio de /login .
+  Los servicios pueden ser consumidos con el JSONObject generico, adicionalmente se pueden agregar parametros especificos para cada servicio
+  {"id":{id_elemento_buscar}}
+  
+<h1>personajes</h1>
+Debe proporcionar el usuario y contraseña del usuario para obtener un token para el uso de los demas endpoint
+  
+ 
+
+`POST /personajes`
+
+### Request
+
+  curl -i -H 'Accept: application/json' -d '{"id":1009351}' http://server_name:8181/apiMarvel/personajes
+  
+### Response
+
+#### Header
+            X-Content-Type-Options: nosniff
+            X-XSS-Protection: 1; mode=block
+            Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+            Pragma: no-cache
+            Expires: 0
+            X-Frame-Options: DENY
+            Content-Type: application/json
+            Transfer-Encoding: chunked
+            Date: Fri, 10 Dec 2021 04:28:47 GMT
+            Keep-Alive: timeout=60
+            Connection: keep-alive
 
 
+  
+  { "response": { "code": "200", "status": "Ok", "copyright": " 2021 MARVEL", "attributionText": "", "attributionHTML": "", "data": { "offset": "0", "limit": "20", "total": "1", "count": "1", "results": [ { "id": "1009351", "name": "Hulk", "series":[] "creators":[] "comics":[] }] } }}
 
+  JSONObject de Result { MarvelCharacterResponse }
+  
+#### Parametros adicionales 
+  {"id":id_personaje, "name": "name_personaje", "idComic":123456789,"idSerie":123456789 }
+  
+  
+  
+  
+ 
+
+`POST   /personajes/pic`
+
+### Request
+
+  curl -i -H 'Accept: application/json' -d '{"id":1009351}' http://server_name:8181/apiMarvel/personajes/pic
+  
+### Response
+
+#### Header
+          Set-Cookie: JSESSIONID=EEF8744091592FF224C360F6A5865A64; Path=/apiMarvel; HttpOnly
+          X-Content-Type-Options: nosniff
+          X-XSS-Protection: 1; mode=block
+          Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+          Pragma: no-cache
+          Expires: 0
+          X-Frame-Options: DENY
+          Content-Type: image/jpeg
+          Content-Length: 96377
+          Date: Fri, 10 Dec 2021 16:22:50 GMT
+          Keep-Alive: timeout=60
+          Connection: keep-alive
+
+    Imagen
+    
+  
+
+`POST   /personajes/datos`
+
+### Request
+
+  curl -i -H 'Accept: application/json' -d '{"id":1009351}' http://server_name:8181/apiMarvel/personajes/datos
+  
+### Response
+
+#### Header
+         X-Content-Type-Options: nosniff
+          X-XSS-Protection: 1; mode=block
+          Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+          Pragma: no-cache
+          Expires: 0
+          X-Frame-Options: DENY
+          Content-Type: application/json
+          Transfer-Encoding: chunked
+          Date: Fri, 10 Dec 2021 16:24:47 GMT
+          Keep-Alive: timeout=60
+          Connection: keep-alive
+
+    {
+  "response": {
+      "urlImg": "http://i.annihil.us/u/prod/marvel/i/mg/5/a0/538615ca33ab0.jpg",   "descripcion": "Caught in a gamma bomb ."  },  "horaRespuesta": "2021-12-10T16:24:47.806+00:00",  "img": null
+    }
+  
+  <h1>Busquedas</h1>
+Debe proporcionar el usuario y contraseña del usuario para obtener un token para el uso de los demas endpoint, estos servicios devuelven las busquedas de usuarios
+  por endpoint para el consumo de la API de Marvel
+  
+  
+`POST /busquedaPorUsuario`
+
+### Request
+
+  curl -i -H 'Accept: application/json' -d '{"idusuario":2}' http://server_name:8181/apiMarvel/busquedaPorUsuario
+  
+### Response
+
+#### Header
+            X-Content-Type-Options: nosniff
+            X-XSS-Protection: 1; mode=block
+            Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+            Pragma: no-cache
+            Expires: 0
+            X-Frame-Options: DENY
+            Content-Type: application/json
+            Transfer-Encoding: chunked
+            Date: Fri, 10 Dec 2021 04:28:47 GMT
+            Keep-Alive: timeout=60
+            Connection: keep-alive
+
+
+[ { "idbusquedas": 123, "busqueda": "busqueda text", "fecha": "2021-12-10T03:52:37.000+00:00", "idusuario": { "idusuario": 2, "status": "A" } } ]
+
+
+  
+  
+`GET /busquedas`
+
+### Request
+
+   curl -i -H 'Accept: application/json' http://server_name:8181/apiMarvel/busquedas
+  
+### Response
+
+#### Header
+            X-Content-Type-Options: nosniff
+            X-XSS-Protection: 1; mode=block
+            Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+            Pragma: no-cache
+            Expires: 0
+            X-Frame-Options: DENY
+            Content-Type: application/json
+            Transfer-Encoding: chunked
+            Date: Fri, 10 Dec 2021 04:28:47 GMT
+            Keep-Alive: timeout=60
+            Connection: keep-alive
+
+
+[ { "idbusquedas": 123, "busqueda": "/api/consumida/marvel", "fecha": "2021-12-10T03:52:37.000+00:00", "idusuario": { "idusuario": 2, "status": "A" } } ]
+
+
+  
+  
+
+  
 ## DataBase 
 
 se ha usado como gestor de base de datos MySQL 8.0 , en la aplicacion se definio un usuario de conexion apiMarvelDB y contraseña Superhero2021:
