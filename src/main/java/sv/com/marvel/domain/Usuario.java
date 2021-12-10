@@ -29,8 +29,11 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "idusuario")
     private Integer idusuario;
+
     @Column(name = "usu")
     private String usu;
+	@Transient
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "pass")
     private String pass;
     @Column(name = "status")
